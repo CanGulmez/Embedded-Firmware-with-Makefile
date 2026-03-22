@@ -24,7 +24,8 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#include "../drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+
+#include "../lib/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
 
 /* Global and General Definitions */
 
@@ -61,24 +62,23 @@ extern UART_HandleTypeDef huart4;
 /**
  * Transmit the logs from MCU to PC over serial UART line.
  */
-#define printLog(format, ...)																	\
-{																										\
-	char buffer[BUFFER_SIZE];																	\
-																										\
-	snprintf(buffer, BUFFER_SIZE, format "\r\n", ##__VA_ARGS__);					\
-	HAL_UART_Transmit(&huart4, buffer, strlen(buffer), HAL_MAX_DELAY);			\
+#define printLog(format, ...)																		\
+{																											\
+	char buffer[BUFFER_SIZE];																		\
+																											\
+	snprintf(buffer, BUFFER_SIZE, format "\r\n", ##__VA_ARGS__);						\
+	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);	\
 }
 
 /**
  * Transmit the HAL error from MCU to PC over serial UART line.
  */
-#define printError(status, format, ...)													\
-{																										\
-	char buffer[BUFFER_SIZE];																	\
-																										\
-	snprintf(buffer, BUFFER_SIZE, "*** " format 	" (STATUS = %s) " 				\
-		"(%s::%d) ***\r\n", ##__VA_ARGS__, STATUS(status), FILE, LINE);			\
-	HAL_UART_Transmit(&huart4, buffer, strlen(buffer), HAL_MAX_DELAY);			\
+#define printError(status, format, ...)														\
+{																											\
+	char buffer[BUFFER_SIZE];																		\																															\
+	snprintf(buffer, BUFFER_SIZE, "*** " format 	" (STATUS = %s) "						\
+		"(%s::%d) ***\r\n", ##__VA_ARGS__, STATUS(status), FILE, LINE);				\
+	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);	\
 }
 
 /*****************************************************************************/

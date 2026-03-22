@@ -14,22 +14,22 @@ DEVICE_VARIANT	:= STM32F446RETx
 
 # Compiler and linker flags
 CORTEX_FLAGS	:= -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-COMMON_FLAGS	:= -g3 -Os -ffunction-sections -fdata-sections -Wall
+COMMON_FLAGS	:= -g3 -O0 -Wall -ffunction-sections -fdata-sections
 AS_FLAGS			:= -x assembler-with-cpp
 
 # Include paths
 MAIN_INC			:= ./src
-CMSIS_INC		:= ./drivers/CMSIS/Include
-CMSIS_DEV_INC	:= ./drivers/CMSIS/Device/ST/STM32F4xx/Include
-HAL_INC			:= ./drivers/STM32F4xx_HAL_Driver/Inc
-CMSIS_DSP_INC	:= ./drivers/CMSIS/DSP/Include
+CMSIS_INC		:= ./lib/CMSIS/Include
+CMSIS_DEV_INC	:= ./lib/CMSIS/Device/ST/STM32F4xx/Include
+HAL_INC			:= ./lib/STM32F4xx_HAL_Driver/Inc
+CMSIS_DSP_INC	:= ./lib/CMSIS/DSP/Include
 
 # Source and special files
 MAIN_SRC			:= $(wildcard ./src/*.c)
-HAL_SRC			:= $(wildcard ./drivers/STM32F4xx_HAL_Driver/Src/*.c)
-SYSTEM_SRC		:= ./drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
-STARTUP_CODE	:= ./drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f446xx.S
-LINKER_SCRIPT	:= ./drivers/STM32F446RETX_FLASH.ld
+HAL_SRC			:= $(wildcard ./lib/STM32F4xx_HAL_Driver/Src/*.c)
+SYSTEM_SRC		:= ./lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
+STARTUP_CODE	:= ./lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f446xx.S
+LINKER_SCRIPT	:= ./lib/STM32F446RETX_FLASH.ld
 
 # Sorthand and build definititions
 DEFINES			:= -D$(DEVICE_FAMILY) -D$(DEVICE_MODEL) -D$(DEVICE_VARIANT) \
@@ -47,31 +47,23 @@ LDFLAGS			:= $(CORTEX_FLAGS) -T $(LINKER_SCRIPT) \
 				   	-Wl,--start-group -lc -lm -lnosys -Wl,--end-group
 
 # Output definitions
-FIRMWARE_ELF	:= firmware.elf
-FIRMWARE_BIN	:= firmware.bin
+FIRMWARE_ELF	:= ./bin/firmware.elf
+FIRMWARE_BIN	:= ./bin/firmware.bin
 
 .PHONY: all
 
 all:
-	@echo "-------------------------------------"
-	@echo "----- Building the source files -----"
-	@echo "-------------------------------------"
+	@echo "Building the source files..."
 	@$(CC) $(AFLAGS) -c $(STARTUP_CODE)
 	@$(CC) $(CFLAGS) -c $(SOURCES)
 
-	@echo "\n------------------------------------"
-	@echo "----- Linking the object files -----"
-	@echo "------------------------------------"
+	@echo "\nLinking the object files..."
 	@$(CC) $(LDFLAGS) $(OBJECTS) -o $(FIRMWARE_ELF)
 	@$(OBJCOPY) -O binary $(FIRMWARE_ELF) $(FIRMWARE_BIN)
 	@$(RM) $(OBJECTS)
 
-	@echo "\n-------------------------------------"
-	@echo "----- The firmware memory usage -----"
-	@echo "-------------------------------------"
+	@echo "\nThe firmware section sizes:"
 	@$(SIZE) $(FIRMWARE_ELF)
 
-	@echo "\n-------------------------------------"
-	@echo "----- The firmware binary format ----"
-	@echo "-------------------------------------"
+	@echo "\nThe firmware binary format:"
 	@$(FILE) $(FIRMWARE_ELF)

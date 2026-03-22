@@ -27,7 +27,7 @@ To build the firmware, just run the Makefile:
 $ make
 ```
 
-This will create the both `firmware.elf` and `firmware.bin`. According to your
+This will create the both `firmware.elf` and `firmware.bin`. According to your$$
 situation, use one of them to flash the firmware. I generally work with `.elf`
 executables. Because it has debugging symbols beside the program machine code.
 

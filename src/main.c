@@ -19,6 +19,8 @@
 
 int main(void)
 {
+	static int16_t i = 0;
+
 	HAL_Init();
 
 	configOscClk();
@@ -28,7 +30,7 @@ int main(void)
 
 	while (1)
 	{
-		printLog("Hello from STM32!");
+		printLog("Hello from STM32! (#%d)", ++i);
 		HAL_Delay(1000);
 	}
 }

@@ -44,7 +44,7 @@ CFLAGS			:= $(CORTEX_FLAGS) $(COMMON_FLAGS) $(DEFINES) $(INCLUDES)
 AFLAGS			:= $(CORTEX_FLAGS) $(AS_FLAGS) $(DEFINES) $(INCLUDES)
 LDFLAGS			:= $(CORTEX_FLAGS) -T $(LINKER_SCRIPT) \
 						-Wl,--gc-sections,--relax --specs=nano.specs --specs=nosys.specs \
-				   	-Wl,--start-group -lc -lm -lnosys -Wl,--end-group
+				   	-Wl,--start-group -lc -lm -Wl,--end-group
 
 # Output definitions
 FIRMWARE_ELF	:= ./bin/firmware.elf

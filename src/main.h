@@ -19,19 +19,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
 
-#include "../lib/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Global and General Definitions */
 
 #define BUFFER_SIZE				64
 #define DATA_SIZE					512
-#define SAMPLE_SIZE				( DATA_SIZE * 2 )
+#define SAMPLE_SIZE				(DATA_SIZE * 2)
 
 #define FILE						__FILE__
 #define LINE						__LINE__
@@ -75,7 +74,8 @@ extern UART_HandleTypeDef huart4;
  */
 #define printError(status, format, ...)														\
 {																											\
-	char buffer[BUFFER_SIZE];																		\																															\
+	char buffer[BUFFER_SIZE];																		\
+																											\
 	snprintf(buffer, BUFFER_SIZE, "*** " format 	" (STATUS = %s) "						\
 		"(%s::%d) ***\r\n", ##__VA_ARGS__, STATUS(status), FILE, LINE);				\
 	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);	\

@@ -4,8 +4,9 @@
 CC					:= arm-none-eabi-gcc
 OBJCOPY			:= arm-none-eabi-objcopy
 SIZE				:= arm-none-eabi-size
-RM					:= rm -f
+RM					:= rm
 FILE				:= file
+AR					:= ar rcs
 
 # Microcontroller-specific definitions
 DEVICE_FAMILY	:= STM32F4xx
@@ -14,34 +15,33 @@ DEVICE_VARIANT	:= STM32F446RETx
 
 # Compiler and linker flags
 CORTEX_FLAGS	:= -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-COMMON_FLAGS	:= -g3 -O0 -Wall -ffunction-sections -fdata-sections
+COMMON_FLAGS	:= -O0 -Wall -ffunction-sections -fdata-sections
 AS_FLAGS			:= -x assembler-with-cpp
 
 # Include paths
 MAIN_INC			:= ./src
-CMSIS_INC		:= ./lib/CMSIS/Include
-CMSIS_DEV_INC	:= ./lib/CMSIS/Device/ST/STM32F4xx/Include
-HAL_INC			:= ./lib/STM32F4xx_HAL_Driver/Inc
-CMSIS_DSP_INC	:= ./lib/CMSIS/DSP/Include
+CMSIS_INC		:= ./driver/CMSIS/Include
+CMSIS_DEV_INC	:= ./driver/CMSIS/Device/ST/STM32F4xx/Include
+HAL_INC			:= ./driver/STM32F4xx_HAL_Driver/Inc
 
 # Source and special files
 MAIN_SRC			:= $(wildcard ./src/*.c)
-HAL_SRC			:= $(wildcard ./lib/STM32F4xx_HAL_Driver/Src/*.c)
-SYSTEM_SRC		:= ./lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
-STARTUP_CODE	:= ./lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f446xx.S
-LINKER_SCRIPT	:= ./lib/STM32F446RETX_FLASH.ld
+HAL_SRC			:= $(wildcard ./driver/STM32F4xx_HAL_Driver/Src/*.c)
+SYSTEM_SRC		:= ./driver/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
+STARTUP_CODE	:= ./driver/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f446xx.S
+LINKER_SCRIPT	:= ./driver/STM32F446RETX_FLASH.ld
 
 # Sorthand and build definititions
 DEFINES			:= -D$(DEVICE_FAMILY) -D$(DEVICE_MODEL) -D$(DEVICE_VARIANT) \
 						-DUSE_HAL_DRIVER
 
-SOURCES			:= $(MAIN_SRC) $(HAL_SRC) $(SYSTEM_SRC)
-OBJECTS			:= $(notdir $(patsubst %.c,%.o,$(SOURCES))) startup_stm32f446xx.o
-INCLUDES			:= -I$(MAIN_INC) -I$(CMSIS_DEV_INC) -I$(CMSIS_INC) -I$(HAL_INC) \
-						-I$(CMSIS_DSP_INC)
+INCLUDES			:= -I$(MAIN_INC) -I$(CMSIS_DEV_INC) -I$(CMSIS_INC) -I$(HAL_INC)
+DRIVER_SRCS		:= $(HAL_SRC) $(SYSTEM_SRC)
+DRIVER_OBJS		:= $(notdir $(patsubst %.c,%.o,$(DRIVER_SRCS))) startup_stm32f446xx.o
+MAIN_OBJS		:= $(notdir $(patsubst %.c,%.o,$(MAIN_SRC)))
 
 CFLAGS			:= $(CORTEX_FLAGS) $(COMMON_FLAGS) $(DEFINES) $(INCLUDES)
-AFLAGS			:= $(CORTEX_FLAGS) $(AS_FLAGS) $(DEFINES) $(INCLUDES)
+AFLAGS			:= $(CORTEX_FLAGS) $(AS_FLAGS)
 LDFLAGS			:= $(CORTEX_FLAGS) -T $(LINKER_SCRIPT) \
 						-Wl,--gc-sections,--relax --specs=nano.specs --specs=nosys.specs \
 				   	-Wl,--start-group -lc -lm -Wl,--end-group
@@ -49,18 +49,31 @@ LDFLAGS			:= $(CORTEX_FLAGS) -T $(LINKER_SCRIPT) \
 # Output definitions
 FIRMWARE_ELF	:= ./bin/firmware.elf
 FIRMWARE_BIN	:= ./bin/firmware.bin
+LIBRARY			:= ./lib/lib$(DEVICE_FAMILY).a
 
-.PHONY: all
+.PHONY: lib firmware
 
-all:
-	@echo "Building the source files..."
-	@$(CC) $(AFLAGS) -c $(STARTUP_CODE)
-	@$(CC) $(CFLAGS) -c $(SOURCES)
+lib:
+	@echo "Compiling the source files..."
+	$(CC) $(AFLAGS) -c $(STARTUP_CODE)
+	$(CC) $(CFLAGS) -c $(DRIVER_SRCS)
+
+	@echo "\nArchiving the object files..."
+	$(AR) $(LIBRARY) $(DRIVER_OBJS)
+
+	@echo "\nRemoving the object files..."
+	$(RM) $(DRIVER_OBJS)
+
+firmware:
+	@echo "Compiling the source files..."
+	$(CC) -g3 $(CFLAGS) -c $(MAIN_SRC)
 
 	@echo "\nLinking the object files..."
-	@$(CC) $(LDFLAGS) $(OBJECTS) -o $(FIRMWARE_ELF)
-	@$(OBJCOPY) -O binary $(FIRMWARE_ELF) $(FIRMWARE_BIN)
-	@$(RM) $(OBJECTS)
+	$(CC) $(LDFLAGS) $(MAIN_OBJS) -o $(FIRMWARE_ELF) -l$(DEVICE_FAMILY) -L./lib
+	$(OBJCOPY) -O binary $(FIRMWARE_ELF) $(FIRMWARE_BIN)
+
+	@echo "\nRemoving the object files..."
+	$(RM) $(MAIN_OBJS)
 
 	@echo "\nThe firmware section sizes:"
 	@$(SIZE) $(FIRMWARE_ELF)

@@ -1,18 +1,10 @@
 /**
- ******************************************************************************
+ *******************************************************************************
  * @file 	peripheral.c
- * @author 	Ahmet Can GULMEZ
+ * @author 	Can GULMEZ
  * @brief 	Peripheral configurations.
  * 
- ******************************************************************************
- * @attention
- * 
- * Copyright (c) 2025 Ahmet Can GULMEZ.
- * All rights reserved.
- * 
- * This software is licensed under the MIT License.
- * 
- *****************************************************************************
+ *******************************************************************************
  */
 
 #include "main.h"
@@ -29,7 +21,7 @@ void configOscClk(void)
    iosc.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
    // iosc.PLL.PLLState = RCC_PLL_NONE;
    HAL_RCC_OscConfig(&iosc);
-
+	
    iclk.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | 
 						  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
    iclk.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
@@ -43,7 +35,7 @@ void configDebugPort(void)
 {
 	__HAL_RCC_GPIOC_CLK_ENABLE();
 	__HAL_RCC_UART4_CLK_ENABLE();
-
+	
 	igpio.Mode = GPIO_MODE_AF_PP;
    igpio.Alternate = GPIO_AF8_UART4;			// UART4 uses AF8
    igpio.Pull = GPIO_NOPULL;

@@ -1,16 +1,8 @@
 /**
  ******************************************************************************
  * @file 	main.h
- * @author 	Ahmet Can GULMEZ
+ * @author 	Can GULMEZ
  * @brief 	Main header file.
- * 
- ******************************************************************************
- * @attention
- * 
- * Copyright (c) 2025 Ahmet Can GULMEZ.
- * All rights reserved.
- * 
- * This software is licensed under the MIT License.
  * 
  ******************************************************************************
  */
@@ -24,7 +16,11 @@
 #include <math.h>
 #include <ctype.h>
 
-#include "stm32f4xx_hal.h"
+#include "../driver/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
+#include "../driver/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+#include "../driver/CMSIS/Include/core_cm4.h"
+
+#include "../driver/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
 
 /* Global and General Definitions */
 

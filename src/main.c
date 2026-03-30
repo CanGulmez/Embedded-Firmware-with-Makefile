@@ -17,7 +17,7 @@ int main(void)
 	
 	configOscClk();
 	configDebugPort();
-
+	
 	printLog("\nThe firmware is running...");
 	
 	while (1)

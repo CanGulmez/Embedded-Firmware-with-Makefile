@@ -16,11 +16,7 @@
 #include <math.h>
 #include <ctype.h>
 
-#include "../driver/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
-#include "../driver/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
-#include "../driver/CMSIS/Include/core_cm4.h"
-
-#include "../driver/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Global and General Definitions */
 
@@ -81,6 +77,11 @@ extern UART_HandleTypeDef huart4;
 /*****************************************************************************/
 
 /* Function Prototypes */
+
+extern int _read(int, char *, int);
+extern int _write(int, char *, int);
+extern int _lseek(int, int, int);
+extern int _close(int);
 
 extern void configOscClk(void);
 extern void configDebugPort(void);

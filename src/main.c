@@ -19,7 +19,7 @@ int main(void)
 	configDebugPort();
 	
 	printLog("\nThe firmware is running...");
-	
+
 	while (1)
 	{
 		printLog("Hello from STM32! (#%ld)", i++);

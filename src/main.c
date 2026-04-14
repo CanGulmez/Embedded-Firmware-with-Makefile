@@ -20,10 +20,17 @@ int main(void)
 	
 	printLog("\nThe firmware is running...");
 
+	// __disable_irq();		/* disable the all interrupts */
+
+	/* Make the fake interrupt */
+	NVIC_EnableIRQ(SPI1_IRQn);
+	NVIC_SetPriority(SPI1_IRQn, 3);
+	NVIC_SetPendingIRQ(SPI1_IRQn);
+	
 	while (1)
 	{
 		printLog("Hello from STM32! (#%ld)", i++);
 		HAL_Delay(1000);
 	}
 }
- 
+

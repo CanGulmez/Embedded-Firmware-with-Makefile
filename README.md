@@ -24,10 +24,11 @@ there. Mostly, it comes with CMSIS, but move it as how I did.
 To build the firmware, just run the Makefile:
 
 ```bash
-$ make
+$ make lib		# build the static library for just one time
+$ make bin		# build the firmware code for every change
 ```
 
-This will create the both `firmware.elf` and `firmware.bin`. According to your$$
+This will create the both `firmware.elf` and `firmware.bin`. According to your
 situation, use one of them to flash the firmware. I generally work with `.elf`
 executables. Because it has debugging symbols beside the program machine code.
 
@@ -38,6 +39,8 @@ Suppose that you have ST-LINK connection. You can flash the `firmware.elf` with
 $ $ openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program firmware.elf verify reset exit"
 ```
 
-Of course, make sure that you have the `openocd` tool as well. You can install it
-with `apt`.
+Of course, make sure that you have the `openocd` tool as well. You can install:
 
+```bash
+$ sudo apt install openocd
+```

@@ -938,7 +938,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
         }
       }
       while((hdma->Instance->CR & DMA_SxCR_EN) != RESET);
-
+		
       /* Change the DMA state */
       hdma->State = HAL_DMA_STATE_READY;
 

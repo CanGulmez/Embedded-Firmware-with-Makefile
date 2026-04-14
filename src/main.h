@@ -37,9 +37,6 @@
 										 (status == HAL_TIMEOUT)	? "TIMEOUT" :	\
 										 "UNDEFINED")
 
-/*****************************************************************************/
-/*****************************************************************************/
-
 /* Peripheral Handlers */
 
 extern RCC_OscInitTypeDef iosc;
@@ -53,24 +50,26 @@ extern UART_HandleTypeDef huart4;
 /**
  * Transmit the logs from MCU to PC over serial UART line.
  */
-#define printLog(format, ...)																		\
-{																											\
-	char buffer[BUFFER_SIZE];																		\
-																											\
-	snprintf(buffer, BUFFER_SIZE, format "\r\n", ##__VA_ARGS__);						\
-	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);	\
+#define printLog(format, ...)																	\
+{																										\
+	char buffer[BUFFER_SIZE];																	\
+																										\
+	snprintf(buffer, BUFFER_SIZE, format "\r\n", ##__VA_ARGS__);					\
+	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), 					\
+		HAL_MAX_DELAY);																			\
 }
 
 /**
  * Transmit the HAL error from MCU to PC over serial UART line.
  */
-#define printError(status, format, ...)														\
-{																											\
-	char buffer[BUFFER_SIZE];																		\
-																											\
-	snprintf(buffer, BUFFER_SIZE, "*** " format 	" (STATUS = %s) "						\
-		"(%s::%d) ***\r\n", ##__VA_ARGS__, STATUS(status), FILE, LINE);				\
-	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);	\
+#define printError(status, format, ...)													\
+{																										\
+	char buffer[BUFFER_SIZE];																	\
+																										\
+	snprintf(buffer, BUFFER_SIZE, "*** " format 	" (STATUS = %s) "					\
+		"(%s::%d) ***\r\n", ##__VA_ARGS__, STATUS(status), FILE, LINE);			\
+	HAL_UART_Transmit(&huart4, (uint8_t*)buffer, strlen(buffer), 					\
+		HAL_MAX_DELAY);																			\
 }
 
 /*****************************************************************************/
@@ -85,4 +84,6 @@ extern int _close(int);
 
 extern void configOscClk(void);
 extern void configDebugPort(void);
+
 extern void SysTick_Handler(void);
+extern void SPI1_IRQHandler(void);

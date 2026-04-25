@@ -1,24 +1,20 @@
 /**
- *******************************************************************************
- * @file 	main.c
- * @author 	Can GULMEZ
- * @brief 	Main source file.
- * 
- *******************************************************************************
+ * Main source of the firmware.
  */
 
 #include "main.h"
 
+static int32_t i = 0;
+
 int main(void)
 {
-	static int32_t i = 0;
-
 	HAL_Init();
 	
 	configOscClk();
 	configDebugPort();
 	
 	printLog("\nThe firmware is running...");
+	printLog("System clock is set to %ld HZ.", SystemCoreClock);
 
 	// __disable_irq();		/* disable the all interrupts */
 
@@ -30,7 +26,7 @@ int main(void)
 	while (1)
 	{
 		printLog("Hello from STM32! (#%ld)", i++);
-		HAL_Delay(1000);
+		HAL_Delay(2000);
 	}
 }
 

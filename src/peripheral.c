@@ -1,10 +1,5 @@
 /**
- *******************************************************************************
- * @file 	peripheral.c
- * @author 	Can GULMEZ
- * @brief 	Peripheral configurations.
- * 
- *******************************************************************************
+ * Peripheral initializations of the firmware.
  */
 
 #include "main.h"
@@ -19,7 +14,7 @@ void configOscClk(void)
 	iosc.OscillatorType = RCC_OSCILLATORTYPE_HSI;
    iosc.HSIState = RCC_HSI_ON;
    iosc.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-   // iosc.PLL.PLLState = RCC_PLL_NONE;
+   iosc.PLL.PLLState = RCC_PLL_OFF;
    HAL_RCC_OscConfig(&iosc);
 	
    iclk.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | 

@@ -7,9 +7,9 @@
             "cStandard": "gnu17",
             "includePath": [
                 "${workspaceFolder}/src",
-                "${workspaceFolder}/driver/CMSIS/Include",
-                "${workspaceFolder}/driver/CMSIS/Device/ST/STM32F4xx/Include",
-                "${workspaceFolder}/driver/STM32F4xx_HAL_Driver/Inc"
+                "${workspaceFolder}/drivers/CMSIS/Include",
+                "${workspaceFolder}/drivers/CMSIS/Device/ST/STM32F4xx/Include",
+                "${workspaceFolder}/drivers/STM32F4xx_HAL_Driver/Inc"
             ],
             "defines": [
                 "STM32F4xx",

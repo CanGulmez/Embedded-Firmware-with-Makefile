@@ -1,10 +1,5 @@
 /**
- ******************************************************************************
- * @file 	syscalls.c
- * @author 	Can GULMEZ
- * @brief 	Dummy syscall implementations.
- * 
- ******************************************************************************
+ * Dummy syscall implementations of the firmware.
  */
 
 #include "main.h"

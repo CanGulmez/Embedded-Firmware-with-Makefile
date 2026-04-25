@@ -20,16 +20,16 @@ AS_FLAGS			:= -x assembler-with-cpp
 
 # Include paths
 MAIN_INC			:= ./src
-CMSIS_INC		:= ./driver/CMSIS/Include
-CMSIS_DEV_INC	:= ./driver/CMSIS/Device/ST/STM32F4xx/Include
-HAL_INC			:= ./driver/STM32F4xx_HAL_Driver/Inc
+CMSIS_INC		:= ./drivers/CMSIS/Include
+CMSIS_DEV_INC	:= ./drivers/CMSIS/Device/ST/STM32F4xx/Include
+HAL_INC			:= ./drivers/STM32F4xx_HAL_Driver/Inc
 
 # Source and special files
 MAIN_SRC			:= $(wildcard ./src/*.c)
-HAL_SRC			:= $(wildcard ./driver/STM32F4xx_HAL_Driver/Src/*.c)
-SYSTEM_SRC		:= ./driver/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
-STARTUP_CODE	:= ./driver/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f446xx.S
-LINKER_SCRIPT	:= ./driver/STM32F446RETX_FLASH.ld
+HAL_SRC			:= $(wildcard ./drivers/STM32F4xx_HAL_Driver/Src/*.c)
+SYSTEM_SRC		:= ./drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
+STARTUP_CODE	:= ./drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f446xx.S
+LINKER_SCRIPT	:= ./drivers/STM32F446RETX_FLASH.ld
 
 # Sorthand and build definititions
 DEFINES			:= -D$(DEVICE_FAMILY) -D$(DEVICE_MODEL) -D$(DEVICE_VARIANT) \

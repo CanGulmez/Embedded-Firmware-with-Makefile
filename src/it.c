@@ -1,10 +1,5 @@
 /**
- *******************************************************************************
- * @file 	it.c
- * @author 	Can GULMEZ
- * @brief 	Interrupt Service Routine (IRQ) handlers.
- * 
- *******************************************************************************
+ * Interrupt Service Routines (ISRs) of the firmware.
  */
 
 #include "main.h"
@@ -16,8 +11,8 @@ void SysTick_Handler(void)
 
 void SPI1_IRQHandler(void)
 {
-	uint32_t pri;
+	uint32_t priority;
 
-	pri = NVIC_GetPriority(SPI1_IRQn);
-	printLog("SPI1 data reading completed (%ld).", pri);
+	priority = NVIC_GetPriority(SPI1_IRQn);
+	printLog("SPI1 data reading completed (priority: %ld).", priority);
 }
